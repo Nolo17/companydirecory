@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Company Directory</title>
+        <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+        <meta http-equiv="content-type" content="text/html" charset="utf-8">
+        <meta name="description" content="Mobile friendly app for the administration of a company's directory">
+        <meta name="author" content="Nora Segtrop">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+        <!--Bootstrap-->
+        <link href="./libs/dist/bootstrap/bootstrap.min.css" type="text/css" rel="stylesheet">
+        <!--fontawesome-->
+        <link href="./libs/dist/fontawesome/all.css" rel="stylesheet"> 
+        <!--CSS-->
+        <link href="./libs/css/style.css" type="text/css" rel="stylesheet">
+    </head>
+    <body>
+      <div id='menusection'>
+        <div class='container' id='header'>
+            <div class='row'>
+                <div class='col-9 col-md-11'>
+                    <h1 id='heading'>Company Directory</h1>
+                </div>
+                <div class="d-flex align-items-center">
+                <button class="btn btn-secondary d-flex align-items-center" data-toggle="modal"  role="button" aria-expanded="false" aria-controls="locDepSel" id='addLocDep'>
+                  <img id='settings' src='./libs/dist/img/cog-solid.svg' alt='settings'> 
+                  </button>
+            </div>
+            </div>
+        </div>
+        <div class="collapse justify-content-center" id="locDepSel" id='changemenu'>
+          <div class="row justify-content-center">
+            <button  class="collapsebtn btn btn-secondary col-11" data-toggle="modal" href="#addDepModal" role="button" aria-expanded="false" aria-controls="depSel" id='selDep'>add Department </button>
+            <button  class="collapsebtn btn btn-secondary col-11" data-toggle="modal" href="#deleteDepModal" role="button" aria-expanded="false" aria-controls="depSel" id='delDep'>delete Department </button>
+            <button  class="collapsebtn btn btn-secondary col-11" data-toggle="modal" href="#addLocModal" role="button" aria-expanded="false" aria-controls="locSel" id='selLoc'>add Location</button>
+            <button  class="collapsebtn btn btn-secondary col-11" data-toggle="modal" href="#deleteLocModal" role="button" aria-expanded="false" aria-controls="locSel" id='delLoc'>delete Location</button>
+          </div>    
+            </div>
+        <div class='container-fluid' id='menu'>
+            <div class='row justify-content-center'>
+                <div class="col-md-3 form-group">
+                    <input class="form-control" type='text' id='search' name='search' placeholder="Search">
+                </div>
+                <div class='col-md-3 form-group'>
+                    <select name="department" id="departmentsel" class="form-control" aria-label="Default select example">
+                </select> 
+                </div>
+                <div class='col-md-3 form-group'>
+                    <select name="location" id="locationsel"class="form-control" aria-label="Default select example">
+                    </select>
+                </div>
+                <div type="button" class="col-5 col-md-1 menubutton btn btn-secondary btn-small form-control" id='reset'>Reset</div>
+                <div type="button" class="col-5 col-md-1 menubutton btn btn-secondary btn-small form-control" data-toggle="modal" role="button" aria-expanded="false" aria-controls="addEmployee" id='addEmployeebtn' >+</div>
+            </div>
+        </div>
+      </div>
+        <div class='container-fluid' >
+            <div class='row justify-content-center' id='dataBody'>
+            </div>
+        </div>
+        <div class="modal fade" id="addLocModal" tabindex="-1" role="dialog" aria-labelledby="addLocation" aria-hidden="true" id="newLocModal">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h6 class="modal-title" id="addLocation">Add new location</h6>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                          <input class="form-control" id="newLoc"></input>
+                        </div>
+                      </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                  <button type="button" class="confirmBtn btn" id='saveLoc'>Save</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal fade" id="addDepModal" tabindex="-1" role="dialog" aria-labelledby="addDepartment" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h6 class="modal-title" id="addDepartment">Add new Department</h6>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                          <label for="newDep">Name of new department</label>
+                          <input class="form-control" id="newDep"></input>
+                        </div>
+                        <div class="form-group">
+                            <label for="locSelDep">Location</label>
+                            <select class="form-control" id="locDepSelect">
+                            </select>
+                          </div>
+                      </form>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                  <button class="confirmBtn btn" id='saveDep'>Save</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal fade" id="deleteLocModal" tabindex="-1" role="dialog" aria-labelledby="deleteLocstion" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h6 class="modal-title"> Delete Location</h6>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="deleteLocSel">Location</label>
+                            <select class="form-control" id='deleteLocSel'>
+                            </select>
+                          </div>
+                      </form>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                  <button class="confirmBtn btn" id='deleteLocBtn'>Delete</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal fade" id="deleteDepModal" tabindex="-1" role="dialog" aria-labelledby="deleteDepartment" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h6 class="modal-title"> Delete Department</h6>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="deleteDepSel">Department</label>
+                            <select class="form-control" id='deleteDepSel'>
+                            </select>
+                          </div>
+                      </form>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                  <button class="confirmBtn btn" id='deleteDepBtn'>Delete</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal fade" id="addEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="addEmployee" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h6 class="modal-title">New Employee</h6>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                          <label for="newFirstName">First Name</label>
+                          <input class="form-control" id="newFirstName"></input>
+                        </div>
+                        <div class="form-group">
+                            <label for="newLastName">Last Name</label>
+                            <input class="form-control" id="newLastName"></input>
+                          </div>
+                          <div class="form-group">
+                            <label for="newJobTitle">Job Title</label>
+                            <input class="form-control" id="newJobTitle"></input>
+                          </div>
+                          <div class="form-group">
+                            <label for="newEmail">Email</label>
+                            <input class="form-control" id="newEmail"></input>
+                          </div>
+                        <div class="form-group">
+                            <label for="employeeDepSelect">Department</label>
+                            <select class="form-control" id="employeeDepSelect">
+                            </select>
+                          </div>
+                      </form>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                  <button class="confirmBtn btn" id='saveEmployee'>Save</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal fade" id="deleteEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="deleteEmployee" aria-hidden="true" >
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h6 class="modal-title"> Delete Employee</h6>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                        <div>Are you sure?</div>  
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                  <button class="confirmBtn btn" id='deleteEmployeeConfirmBtn'>Delete</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal fade" id="editEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="updateEmployee" aria-hidden="true" >
+          </div>
+          <div class="modal fade" id="validatePassword" tabindex="-1" role="dialog" aria-labelledby="password" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h6 class="modal-title">Sign in</h6>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                          <label for="user">user name</label>
+                          <input class="form-control" id="username" value='admin'></input>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">password</label>
+                            <input class="form-control" id="password" value='password'></input>
+                          </div>
+                      </form>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                  <button class="confirmBtn btn" id='passwordbtn' >Submit</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+      </div>
+      <div class="modal-body" id='errorBody'>
+      </div>
+      <div class="modal-footer" id='errorFooter'>
+      </div>
+    </div>
+  </div>
+</div>
+         <!--jQuery --> 
+         <script type="application/javascript" src="./libs/dist/jquery/jquery.min.js"></script>
+         <!--Bootstrap-->
+         <script type="application/javascript" src="./libs/dist/bootstrap/bootstrap.min.js"></script>
+         <!--JS-->
+         <script type="application/javascript" src="./libs/js/main.js"></script>
+    </body>
+</html>

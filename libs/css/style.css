@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;700&display=swap');
+
+body {
+    color: #505763;
+    margin:0;
+    background-color: #a5b2b8;
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
+
+#menusection{
+    background-color: #c7d5db;
+    border-radius:  2%;
+}
+
+#header {
+    color: #AC9969;
+    margin: 0 1%;
+    padding-top: 2%;
+    font-family: 'Roboto Condensed 700', sans-serif;
+}
+
+#heading{
+    padding: 5px;
+    padding-left: 10px;
+    border: solid; 
+    border-radius: 2%;
+}
+
+#settings {
+    height: 20px;
+    filter: invert(99%) sepia(27%) saturate(0%) hue-rotate(18deg) brightness(104%) contrast(100%);
+}
+
+#menu{
+    margin-top: 5px;   
+}
+
+@media only screen and (max-width: 600px) {
+    div.form-group {
+       margin-bottom: 5px;
+     }
+  } 
+
+#addLocDep{
+    margin: 0, 5px;
+}
+
+#addEmployeebtn{
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.collapsebtn{
+    margin: 1px;
+}
+
+.menubutton {
+    max-height: 38px;
+    margin: 0 2px;
+    margin-bottom: 3px;
+}
+
+.card{
+    margin: 5px;
+    width: 370px;
+}
+
+.changeBtn:hover {
+    background-color: #AC9969;
+}
+
+.confirmBtn{
+    background-color: #AC9969;   
+}
+
+.confirmBtn:hover{
+    background-color: #917b44;   
+}
+
+
+/* CSV */
+e8eff1,505763,c7d5db
+
+/* Array */
+["e8eff1","505763","c7d5db"]
+
+/* Object */
+{"Alice Blue":"e8eff1","Black Coral":"505763","Beau Blue":"c7d5db"}
+
+/* Extended Array */
+[{"name":"Alice Blue","hex":"e8eff1","rgb":[232,239,241],"cmyk":[4,1,0,5],"hsb":[193,4,95],"hsl":[193,24,93],"lab":[94,-2,-2]},
+{"name":"Black Coral","hex":"505763","rgb":[80,87,99],"cmyk":[19,12,0,61],"hsb":[218,19,39],"hsl":[218,11,35],"lab":[37,0,-8]},
+{"name":"Beau Blue","hex":"c7d5db","rgb":[199,213,219],"cmyk":[9,3,0,14],"hsb":[198,9,86],"hsl":[198,22,82],"lab":[84,-4,-5]}]
