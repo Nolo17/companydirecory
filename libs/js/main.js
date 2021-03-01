@@ -51,6 +51,10 @@ $('#addLocDep').click(
 $('#addEmployeebtn').click(
   function(){
     if(signedIn){
+      $("#newFirstName").val('');
+      $("#newLastName").val('');
+      $("#newJobTitle").val('')
+      $("#newEmail").val('');
       $('#addEmployeeModal').modal('toggle');
     } else {
       creatingEmployee=true;
@@ -85,7 +89,6 @@ $('#passwordbtn').click(
   }
 ) 
 
-
 $('#saveLoc').click(
   function(){
     function alreadyRegistered(){
@@ -107,16 +110,18 @@ $('#saveLoc').click(
       console.log(registered)
       showErrorModal('This location exists already.')
     } else if (!length){
-      showErrorModal("Two characters or more required for new location."); 
+      showErrorModal("Valid Input for new location is between 2 and 50 characters."); 
     } else if (incorrectCharacters){
       showErrorModal('Invalid characters. Please only use letters and white spaces.'); 
     }
     else {
       addNewLocation();
       $('#addLocModal').modal('hide');
+      $('#newLoc').val('');
     }
   }
 );
+
 $('#saveDep').click(
   function(){
     function alreadyRegistered(){
@@ -138,7 +143,7 @@ $('#saveDep').click(
     if(registered){
       showErrorModal ('This department exists already.');
     } else if(!lengthChecked) {
-      showErrorModal("Two characters or more required for new department."); 
+      showErrorModal("Valid Input for new department is between 2 and 50 characters."); 
     } else if(incorrectCharacters) {
       showErrorModal('Invalid characters. Please only use letters and white spaces.'); 
     }else if (!$('#locDepSelect').val()){
@@ -146,6 +151,7 @@ $('#saveDep').click(
     } else {
       addNewDepartment();
       $('#addDepModal').modal('hide');
+      $('#newDep').val('');
     }
   }
 );
@@ -170,19 +176,23 @@ $('#saveEmployee').click(
           return exist
         }
       let registered = alreadyRegistered();
-      let valid = validateEmployeeEntry('employeeDepSelect', addNewEmployee, email, fName, lName, job);
+      let valid = validateEmployeeEntry('employeeDepSelect', email, fName, lName, job);
       if(registered){
         showErrorModal('An employee with these details is already registered in the database.');
       } else if (valid){
         addNewEmployee();
         $('#addEmployeeModal').modal('hide')
       }
-      }
-      
+      }     
 );
+
 
 $('#deleteDepBtn').click(
   function(){
+    let dependent = checkDeleteDep($('#deleteDepSel option:selected').text());
+  if (dependent){
+    showErrorModal('Employee entries dependent on this deparment. Deletion not possible')
+  } else 
   deleteDepartment();
   $('#deleteDepModal').modal('hide');
   }
@@ -190,6 +200,10 @@ $('#deleteDepBtn').click(
 
 $('#deleteLocBtn').click(
   function(){
+  let dependent = checkDeleteLoc($('#deleteLocSel').val());
+  if (dependent){
+    showErrorModal('Department entries dependent on this location. Deletion not possible')
+  } else 
   deleteLocation();
   $('#deleteLocModal').modal('hide');
   }
@@ -285,7 +299,6 @@ function getDepartments() {
           getDropdowns($('#deleteDepSel'), departmentdb, placeholder);
       },
       error: function(jqXHR, textStatus, errorThrown) {
-        console.warn(jqXHR.responseText)
         console.log(jqXHR + textStatus+ errorThrown )
       }
     }); 
@@ -306,7 +319,6 @@ function getDepartments() {
             getDropdowns($('#deleteLocSel'), locationdb, placeholder);
       },
       error: function(jqXHR, textStatus, errorThrown) {
-        console.warn(jqXHR.responseText)
         console.log(jqXHR + textStatus+ errorThrown )
       }
     });   
@@ -316,7 +328,7 @@ function getDepartments() {
     console.log($('#search').val())
    $.ajax({
      url: "libs/php/getEmployeeByName.php",
-     type: 'GET',
+     type: 'POST',
      dataType: 'json', 
      data:{
        firstName : $('#search').val(),
@@ -345,7 +357,6 @@ function getDepartments() {
            }
      },
      error: function(jqXHR, textStatus, errorThrown) {
-       console.warn(jqXHR.responseText)
        console.log(jqXHR + textStatus+ errorThrown )
      }
    }); 
@@ -376,7 +387,6 @@ function getDepartments() {
           }
     },
     error: function(jqXHR, textStatus, errorThrown) {
-      console.warn(jqXHR.responseText)
       console.log(jqXHR + textStatus+ errorThrown )
     }
   }); 
@@ -536,7 +546,6 @@ return infoCard
          $('#newLoc').val('');
     },
     error: function(jqXHR, textStatus, errorThrown) {
-      console.warn(jqXHR.responseText)
       console.log(jqXHR + textStatus+ errorThrown )
     }
   }); 
@@ -560,15 +569,12 @@ return infoCard
         $('#locDepSelect').val('placeholder');
    },
    error: function(jqXHR, textStatus, errorThrown) {
-     console.warn(jqXHR.responseText)
      console.log(jqXHR + textStatus+ errorThrown )
    }
  });  
 }
 
 function addNewEmployee() {
-  console.log($('#newFirstName').val());
-  console.log($('#employeeDepSelect').val());
  $.ajax({
    url: "libs/php/insertEmployee.php",
    type: 'POST',
@@ -585,7 +591,6 @@ function addNewEmployee() {
         getEmployees();
    },
    error: function(jqXHR, textStatus, errorThrown) {
-     console.warn(jqXHR.responseText)
      console.log(jqXHR + textStatus+ errorThrown )
    }
  });  
@@ -606,7 +611,6 @@ function deleteDepartment() {
         
    },
    error: function(jqXHR, textStatus, errorThrown) {
-     console.warn(jqXHR.responseText)
      console.log(jqXHR + textStatus+ errorThrown )
    }
  });  
@@ -626,7 +630,6 @@ function deleteLocation() {
         getLocations();
    },
    error: function(jqXHR, textStatus, errorThrown) {
-     console.warn(jqXHR.responseText)
      console.log(jqXHR + textStatus+ errorThrown )
    }
  });  
@@ -646,7 +649,6 @@ function deleteEmployee(id) {
         getEmployees();
    },
    error: function(jqXHR, textStatus, errorThrown) {
-     console.warn(jqXHR.responseText)
      console.log(jqXHR + textStatus+ errorThrown )
    }
  }); 
@@ -677,7 +679,6 @@ function updateEmployee(id) {
         $('#updateDepSelect').val('')
    },
    error: function(jqXHR, textStatus, errorThrown) {
-     console.warn(jqXHR.responseText)
      console.log(jqXHR + textStatus+ errorThrown )
    }
  });
@@ -715,7 +716,7 @@ return true;
 }
 
 function checkLength(input){
-  if (input.length < 2){
+  if (input.length < 2 || input.length > 50){
     return false;
   } else {
   return true;
@@ -739,10 +740,39 @@ function validateEmployeeEntry(selectMenue, email, fName, lName, job){
    } else if(incorrectFirstName|| incorrectLastName|| incorrectJob){
      showErrorModal('Invalid characters. Please only use letters and white spaces.');
    } else if(!lengthFirstName || !lengthLastName){
-     showErrorModal('Names must be at least two characters long.');
+     showErrorModal('Valid input for names between 2 and 50 characters.');
    } else {
        return true;
      }
+}
+
+//check for dependent entries
+
+function checkDeleteLoc(locID){
+  let dependent;
+  for (let i=0; i<departmentdb.length; i++){
+      if (departmentdb[i].locationID == locID){
+        dependent= true
+        break;
+      } else {
+       dependent=false
+      }
+  }
+  return dependent;
+}
+
+function checkDeleteDep(dep){
+  console.log(dep);
+  let dependent;
+  for (let i=0; i<data.length; i++){
+      if (data[i].department == dep){
+        dependent= true
+        break;
+      } else {
+       dependent=false
+      }
+  }
+  return dependent;
 }
 
 //Error display
