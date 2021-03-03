@@ -11,6 +11,17 @@ body {
 #menusection{
     background-color: #c7d5db;
     border-radius:  2%;
+    position: fixed;
+    width: 100%;
+    top:0;
+    z-index: 10;
+}
+
+@media only screen and (max-width: 600px) {
+    #menuesection {
+       max-height: 40%;
+       margin-bottom: 200%;
+     }
 }
 
 #header {
@@ -40,7 +51,18 @@ body {
     div.form-group {
        margin-bottom: 5px;
      }
-  } 
+} 
+
+#dataBody{
+    margin-top: 150px;
+}
+
+@media only screen and (max-width: 600px) {
+    #dataBody {
+       margin-top: 300px;
+     }
+}
+ 
 
 #addLocDep{
     margin: 0, 5px;
