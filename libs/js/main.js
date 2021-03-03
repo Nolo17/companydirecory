@@ -107,7 +107,6 @@ $('#saveLoc').click(
     let length = checkLength($('#newLoc').val());
     let incorrectCharacters= validateInput($('#newLoc').val())
     if(registered){
-      console.log(registered)
       showErrorModal('This location exists already.')
     } else if (!length){
       showErrorModal("Valid Input for new location is between 2 and 50 characters."); 
@@ -127,7 +126,6 @@ $('#saveDep').click(
     function alreadyRegistered(){
       let exist; 
       for (let i=0; i<departmentdb.length; i++){
-        console.log(exist);
         if (departmentdb[i].name == $('#newDep').val()){
          exist=true;
          break;
@@ -165,7 +163,6 @@ $('#saveEmployee').click(
       function alreadyRegistered(){
         let exist; 
         for (let i=0; i<data.length; i++){
-          console.log(exist);
           if ((data[i].firstName == fName && data[i].lastName == lName)||data[i].email == email){
            exist=true;
            break;
@@ -188,25 +185,35 @@ $('#saveEmployee').click(
 
 
 $('#deleteDepBtn').click(
-  function(){
-    let dependent = checkDeleteDep($('#deleteDepSel option:selected').text());
-  if (dependent){
-    showErrorModal('Employee entries dependent on this deparment. Deletion not possible')
-  } else 
-  deleteDepartment();
-  $('#deleteDepModal').modal('hide');
-  }
+   function(){
+     checkDeleteDep($('#deleteDepSel').val())
+     .then((dependent) => {
+       if (dependent){
+        showErrorModal('Employee entries dependent on this deparment. Deletion not possible.')
+      } else {
+      deleteDepartment();
+      $('#deleteDepModal').modal('hide');
+      }
+     })
+     .catch((error)=> {
+      console.log(error)
+     })
+}
 );
 
 $('#deleteLocBtn').click(
   function(){
-  let dependent = checkDeleteLoc($('#deleteLocSel').val());
-  if (dependent){
-    showErrorModal('Department entries dependent on this location. Deletion not possible')
-  } else 
-  deleteLocation();
-  $('#deleteLocModal').modal('hide');
+  checkDeleteLoc($('#deleteLocSel').val())
+  .then((dependent)=>{
+    if (dependent){
+    showErrorModal('Department entries dependent on this location. Deletion not possible.')
+  } else {
+   deleteLocation();
+   $('#deleteLocModal').modal('hide');
   }
+})
+  
+}
 );
 
 // populating dropdown menue
@@ -228,7 +235,6 @@ function getDropdowns(htmlID, db, placeholder){
 function deleteEmployeeClick(id){
   $('#delete'+id+'btn').click(
     function(){
-    console.log(id);
     if(signedIn){
       confirmDeleteEmployee(id);
     } else {
@@ -299,7 +305,7 @@ function getDepartments() {
           getDropdowns($('#deleteDepSel'), departmentdb, placeholder);
       },
       error: function(jqXHR, textStatus, errorThrown) {
-        console.log(jqXHR + textStatus+ errorThrown )
+        console.log(jqXHR + textStatus+ errorThrown );
       }
     }); 
     
@@ -325,7 +331,6 @@ function getDepartments() {
   }
 
   function getEmployeeByName(){
-    console.log($('#search').val())
    $.ajax({
      url: "libs/php/getEmployeeByName.php",
      type: 'POST',
@@ -337,7 +342,6 @@ function getDepartments() {
      success: function(result) {
           $('#dataBody').html('');
           let employeeMatch = result.data;
-           console.log(result);
            for (let j=0; j<employeeMatch.length; j++){
              for(let i=0; i<data.length; i++){
              if (data[i].firstName == employeeMatch[j].firstName || data[i].lastName == employeeMatch[j].lastName){
@@ -420,7 +424,6 @@ return infoCard
     let job = data[i].jobTitle;
     let email = data[i].email;
     let department = data[i].department;
-    console.log(department);
     let updateForm = createUpdateForm(firstName, lastName, job, email);
     $('#editEmployeeModal').append(updateForm);
     getDropdowns($('#updateDepSelect'), departmentdb);
@@ -432,7 +435,6 @@ return infoCard
     }
     }
   }
-  console.log(departmentdb);
 }
 
   function createUpdateForm(fName, lName, job, mail){
@@ -482,7 +484,6 @@ return infoCard
  // filter database
  
  function filterEmployeesByDepartment(){
-   console.log($('#departmentsel').val());
           $('#dataBody').html('');
           let location ='';
           for (let i= 0; i< data.length; i++){
@@ -501,8 +502,6 @@ return infoCard
             }
             }
           for (let j=0; j<locationdb.length; j++) {
-            console.log(location);
-            console.log(locationdb[j].name)
             if (location == locationdb[j].name){
               let locationID = locationdb[j].id
               $('#locationsel').val(locationID); 
@@ -532,7 +531,6 @@ return infoCard
  //updating database
 
  function addNewLocation() {
-   console.log($('#newLoc').val())
   $.ajax({
     url: "libs/php/insertLocation.php",
     type: 'POST',
@@ -552,8 +550,6 @@ return infoCard
  }
 
  function addNewDepartment() {
-  console.log($('#newDep').val());
-  console.log($('#locDepSelect').val());
  $.ajax({
    url: "libs/php/insertDepartment.php",
    type: 'POST',
@@ -597,7 +593,6 @@ function addNewEmployee() {
 }
 
 function deleteDepartment() {
-  console.log($('#deleteDepSel').val());
  $.ajax({
    url: "libs/php/deleteDepartmentByID.php",
    type: 'POST',
@@ -617,7 +612,6 @@ function deleteDepartment() {
 }
 
 function deleteLocation() {
-  console.log($('#deleteLocSel').val());
  $.ajax({
    url: "libs/php/deleteLocation.php",
    type: 'POST',
@@ -655,8 +649,6 @@ function deleteEmployee(id) {
 }
 
 function updateEmployee(id) {
-  console.log(id);
-  console.log($('#FirstName').val(), $('#LastName').val(), $('#JobTitle').val(), $('#Email').val(), $('#updateDepSelect').val());
   $.ajax({
    url: "libs/php/updateEmployee.php",
    type: 'POST',
@@ -748,31 +740,59 @@ function validateEmployeeEntry(selectMenue, email, fName, lName, job){
 
 //check for dependent entries
 
-function checkDeleteLoc(locID){
-  let dependent;
-  for (let i=0; i<departmentdb.length; i++){
-      if (departmentdb[i].locationID == locID){
-        dependent= true
-        break;
-      } else {
-       dependent=false
-      }
-  }
-  return dependent;
+function checkDeleteDep(depID){
+  return new Promise((resolve, reject) => {
+  $.ajax({
+    url: "libs/php/getDepartmentByID.php",
+    type: 'POST',
+    dataType: 'json', 
+    data:{
+      departmentID : depID
+    },
+    success: function(result) {
+        let dependencies;
+        let count = result.data[0]['count(id)']
+        if (count >0){
+          dependencies = true;
+        } else {
+          dependencies = false
+        }
+        resolve(dependencies);
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.log(jqXHR + textStatus+ errorThrown )
+      reject(error)
+    }
+  }); 
+})
 }
 
-function checkDeleteDep(dep){
-  console.log(dep);
-  let dependent;
-  for (let i=0; i<data.length; i++){
-      if (data[i].department == dep){
-        dependent= true
-        break;
-      } else {
-       dependent=false
+function checkDeleteLoc(locID){
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: "libs/php/getLocationByID.php",
+      type: 'POST',
+      dataType: 'json', 
+      data:{
+        locationID : locID
+      },
+      success: function(result) {
+        console.log(result);
+          let dependencies;
+          let count = result.data[0]['count(id)']
+          if (count >0){
+            dependencies = true;
+          } else {
+            dependencies = false
+          }
+          resolve(dependencies);
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.log(jqXHR + textStatus+ errorThrown )
+        reject(error)
       }
-  }
-  return dependent;
+    }); 
+  })
 }
 
 //Error display
